@@ -44,3 +44,10 @@ class Button:
     def __init__(self, x, y, w, h, text):
         self.rect = pygame.Rect(x, y, w, h)
         self.text = text
+    def draw(self, screen, font):
+        pygame.draw.rect(screen, BLACK, self.rect, 2)
+        text_surf = font.render(self.text, True, BLACK)
+        screen.blit(text_surf, text_surf.get_rect(center=self.rect.center))
+
+    def is_clicked(self, pos):
+        return self.rect.collidepoint(pos)
