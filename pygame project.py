@@ -112,3 +112,4 @@ class InputBox:
     def set_value(self, text):
         self.text = text
         self.txt_surface = font_small.render(self.text, True, BLACK)
+    
