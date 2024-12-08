@@ -113,3 +113,53 @@ class InputBox:
         self.text = text
         self.txt_surface = font_small.render(self.text, True, BLACK)
     
+class MeleeUnit():
+    # Class Variable
+    category = 'Melee Unit'
+    damaged = False
+    defeated = False
+    frenzy = False
+    chargedefvsl = False
+    crumbling = False
+
+    def __init__(self, name, faction, unitsize, cost, health, meleeatk, meleedef, chargebonus,
+                 fireres, magres, phyres, misres, wardsave, basedmg, apdmg, meleecd,
+                 antiinfantry, antilarge, armor, magatk, fireatk, isinfantry, islarge):
+        # Instance Variable
+        self.name = name
+        self.faction = faction
+        self.unitsize = unitsize
+        self.cost = cost
+        self.health = health
+        self.totalhealth = health * unitsize
+        self.remainhealth = health * unitsize
+        self.meleeatk = meleeatk
+        self.meleedef = meleedef
+        self.chargebonus = chargebonus
+        self.fireres = fireres
+        self.magres = magres
+        self.misres = misres
+        self.phyres = phyres
+        self.wardsave = wardsave
+        self.basedmg = basedmg
+        self.apdmg = apdmg
+        self.meleecd = meleecd
+        self.antiinfantry = antiinfantry
+        self.antilarge = antilarge
+        self.armor = armor
+        self.magatk = magatk
+        self.fireatk = fireatk
+        self.isinfantry = isinfantry
+        self.islarge = islarge
+
+
+# Button instances with adjusted positions
+start_button = Button(WIDTH // 2 - 50, HEIGHT // 2 + 20, 100, 40, "Start")
+setting_button = Button(WIDTH // 2 - 50, HEIGHT // 2 + 80, 100, 40, "Setting")
+reset_button = Button(WIDTH - 180, HEIGHT - 70, 80, 30, "Reset")
+confirm_button = Button(WIDTH - 90, HEIGHT - 70, 80, 30, "Confirm")
+
+# InputBox instances for settings
+totalmoney_input = InputBox(300, 130, 140, 32, str(totalmoney))
+userchargechance_input = InputBox(300, 180, 140, 32, str(userchargechance))
+aichargechance_input = InputBox(300, 230, 140, 32, str(aichargechance))
