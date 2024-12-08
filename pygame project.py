@@ -51,3 +51,27 @@ class Button:
 
     def is_clicked(self, pos):
         return self.rect.collidepoint(pos)
+
+class UnitButton:
+    def __init__(self, unit, x, y, is_user=True):
+        self.unit = unit
+        self.rect = pygame.Rect(x, y, 330, 30)
+        self.color = BLUE if is_user else RED
+        self.selected = False
+
+    def draw(self, surface):
+        # Draw unit rectangle with selected color
+        color = YELLOW if self.selected else self.color
+        pygame.draw.rect(surface, color, self.rect)
+
+        # Draw health bar (for now just using full health)
+        health_bar_width = int(self.rect.width)
+        health_bar_rect = pygame.Rect(self.rect.x, self.rect.y, health_bar_width, 5)
+        pygame.draw.rect(surface, GREEN, health_bar_rect)
+
+        # Draw name
+        text = font_medium.render(self.unit.name, True, BLACK)
+        surface.blit(text, (self.rect.x + 5, self.rect.y + 8))
+
+    def is_clicked(self, pos):
+        return self.rect.collidepoint(pos)
