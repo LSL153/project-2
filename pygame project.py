@@ -75,3 +75,40 @@ class UnitButton:
 
     def is_clicked(self, pos):
         return self.rect.collidepoint(pos)
+
+# InputBox class for interactive fields
+class InputBox:
+    def __init__(self, x, y, w, h, text=''):
+        self.rect = pygame.Rect(x, y, w, h)
+        self.color = BLACK
+        self.text = text
+        self.txt_surface = font_small.render(text, True, BLACK)
+        self.active = False
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                self.active = not self.active
+            else:
+                self.active = False
+            self.color = GREY if self.active else BLACK
+        if event.type == pygame.KEYDOWN:
+            if self.active:
+                if event.key == pygame.K_RETURN:
+                    self.active = False
+                elif event.key == pygame.K_BACKSPACE:
+                    self.text = self.text[:-1]
+                else:
+                    self.text += event.unicode
+                self.txt_surface = font_small.render(self.text, True, BLACK)
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, self.rect, 2)
+        screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))
+
+    def get_value(self):
+        return self.text
+
+    def set_value(self, text):
+        self.text = text
+        self.txt_surface = font_small.render(self.text, True, BLACK)
