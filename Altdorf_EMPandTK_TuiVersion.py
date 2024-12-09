@@ -533,3 +533,73 @@ def aichooseunit2(units)-> int:
             
     return numairand
 
+# In[23]:
+
+
+def checkifdefeated():
+    global userChosen
+    global aiunits
+    defeadnumai = 0
+    defeatednumuser = 0
+    global aiisdefeated
+    global userisdefeated
+    aiisdefeated =False
+    userisdefeated = False
+    for unit in aiunits:
+        if(unit.defeated):
+            defeadnumai+=1
+    if(defeadnumai==len(aiunits)):
+        aiisdefeated=True
+        
+    for unit in userChosen:
+        if(unit.defeated):
+            defeatednumuser+=1
+    if(defeatednumuser==len(userChosen)):
+        userisdefeated=True
+        
+
+
+# In[24]:
+
+
+def calculateallhealth(roster)->int:
+    allhealth=0
+    for unit in roster:
+        allhealth += unit.totalhealth
+    return allhealth
+
+
+# In[25]:
+
+
+def victoryconditioncheckai(roster):
+    global aiallhealth
+    totalhealthleft = 0
+    for unit in roster:
+        totalhealthleft += unit.remainhealth
+    if(totalhealthleft/aiallhealth <= 0.25):
+        print("\nWhat a pity, all of your units are defeated.\nValiant Defeat!")
+    if(0.25 < totalhealthleft/aiallhealth <= 0.50):
+        print("\nWhat a pity, all of your units are defeated.\nClose Defeat!")
+    if(0.50 < totalhealthleft/aiallhealth <= 0.75):
+        print("\nWhat a pity, all of your units are defeated.\nDecesive Defeat!")
+    if(0.75 < totalhealthleft/aiallhealth <= 1):
+        print("\nWhat a pity, all of your units are defeated.\nCrushing Defeat!")   
+
+
+# In[26]:
+
+
+def victoryconditioncheckuser(roster):
+    global userallhealth
+    totalhealthleft = 0
+    for unit in roster:
+        totalhealthleft += unit.remainhealth 
+    if(totalhealthleft/userallhealth <= 0.25):
+        print("\n Congratulations, all of AI's units are defeated!\nPyrrhic Vcitory!")
+    if(0.25 < totalhealthleft/userallhealth <= 0.50):
+        print("\n Congratulations, all of AI's units are defeated!\nClose Vcitory!")
+    if(0.50 < totalhealthleft/userallhealth <= 0.75):
+        print("\n Congratulations, all of AI's units are defeated!\nDecesive Vcitory!")
+    if(0.75 < totalhealthleft/userallhealth <= 1):
+        print("\n Congratulations, all of AI's units are defeated!\nHeroic Vcitory!")
