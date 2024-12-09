@@ -603,3 +603,243 @@ def victoryconditioncheckuser(roster):
         print("\n Congratulations, all of AI's units are defeated!\nDecesive Vcitory!")
     if(0.75 < totalhealthleft/userallhealth <= 1):
         print("\n Congratulations, all of AI's units are defeated!\nHeroic Vcitory!")
+
+# In[27]:
+
+
+def settings():
+    global totalmoney
+    global userchargechance
+    global aichargechance
+    usepreset("preset2")
+    settings="no"
+    while (settings!="exit"):
+        settings=input("Enter \"Yes\" if you want to change settings, or \"exit\" if you don't:")
+        if(settings=="Yes" or settings=="yes"):
+            while True:
+                print("preset 1 is the quick game mode, where the maxium money can be spent on units is 3000, and only 1 charge chance.")
+                print("preset 2 is the normal or long game mode, where the maxium money can be spent on units is 10000, and 5 charge chance.")
+                presetnum=input("Enter \"preset1\" or \"preset2\" if you want ot use preset, or \"exit\" if you don't:")
+                if(presetnum=="exit"):
+                    break
+                if(presetnum=="preset1"):
+                    usepreset(presetnum)
+                    print("preset 1 is applied.")
+                    break
+                if(presetnum=="preset2"):
+                    usepreset(presetnum)
+                    print("preset 2 is applied.")
+                    break
+            if(presetnum=="preset1" or presetnum=="preset2"):
+                break
+            while True:
+                money=input("Enter total number of money you want to have, or \"exit\":")
+                if(money=="exit"):
+                    break
+                if(money.isnumeric()):
+                    totalmoney = int(money)
+                    break
+            while True:
+                usercc=input("Enter number of charge you want to have, or \"exit\":")
+                if(usercc=="exit"):
+                    break
+                if(usercc.isnumeric()):
+                    userchargechance = int(usercc)
+                    break
+            while True:
+                aicc=input("Enter number of charge you want ai to have, or \"exit\":")
+                if(aicc=="exit"):
+                    break
+                if(aicc.isnumeric()):
+                    aichargechance = int(aicc)
+                    break
+                    
+
+
+# In[28]:
+
+
+def play():
+    print("Welcome to Estalia, gentlemen!")
+    global totalmoney
+#     totalmoney = 10000
+    print(f"You have ${totalmoney}, please choose your units wisely.\n")
+    needetail1=input("Enter \"Yes\" if you want to see units information")
+    if(needetail1=="Yes" or needetail1=="yes"):
+        print("Here is the brief detail of all units:\n")
+        briefdetail()
+    needetail=input("Enter \"Yes\" if you want to see detail information")
+    global factionname
+    global userChosen
+    global aiunits
+    userChosen = []
+    moneyleft = totalmoney
+    while(needetail=="Yes" or needetail=="yes"):
+        printfactionunits()
+        if(factionname=="exit"):
+            break
+    print(Fore.RED + "\nNow you can choose your unit, but remember to save some "
+          "money if you want to add skills to them, skills costs $50 each.")
+    print(Style.RESET_ALL)
+    while True:
+        unitchoosed=input("Enter the name of unit to select the Unit that you want to choose, type \"exit\" to exit:")
+        nosuchunit=True
+        if(unitchoosed=="exit"):
+            break
+        for units in unitroster:
+            if(unitchoosed==units.name and moneyleft<units.cost):
+                print(Fore.YELLOW + "Not enough minerals. You have not enough minerals. Not enough minerals.")
+                print(Style.RESET_ALL)
+                nosuchunit = False
+            if(unitchoosed==units.name and moneyleft>=units.cost):
+                moneyleft -= units.cost
+                newunit = copy.copy(units)
+                userChosen.append(newunit)
+                print(f"You choosed {units.name}, it costs {units.cost}, you still have ${moneyleft}")
+                nosuchunit = False
+        if(nosuchunit):
+            print("There is no unit match this name, please match its actual id.")
+    
+    checkrepeat(userChosen)
+    print("\nThese are the units you choosed:\n")
+    sortandprint(userChosen)
+    addskill=input("Enter \"Yes\" if you wish to add skills:")
+    if(addskill=="Yes" or addskill=="yes"):
+        global addskillunit
+        while True:
+            unitaddskill=input("Enter the name of unit you want to add skill to, type \"exit\" to exit:")
+            if(unitaddskill=="exit"):
+                break
+            while (doyouhavetheunit(unitaddskill)):
+                skilladding=input("Enter the name of skill you want to add, type \"exit\" to exit:")
+                if(skilladding=="exit"):
+                    break
+                if(moneyleft<50):
+                    print(Fore.YELLOW + "Not enough minerals. You have not enough minerals. Not enough minerals.")
+                    print(Style.RESET_ALL)
+                    break
+                if(skilladding=="Frenzy" or skilladding == "frenzy"):
+                    buyfrenzy(addskillunit)
+                    moneyleft-=50
+                    print(f"You still have ${moneyleft} left")
+                
+    aichooseunit()
+    checkrepeat(aiunits)
+    print("\nHere are the units chosen by the ai:\n")
+    sortandprint(aiunits)
+    global aiallhealth
+    aiallhealth = calculateallhealth(aiunits)
+    global userallhealth
+    userallhealth = calculateallhealth(userChosen)
+    
+    global userchargechance
+    global aichargechance
+#     userchargechance = 5
+#     aichargechance = 5
+
+    global unitisalive
+    global targetisalive
+    global aiisdefeated
+    global userisdefeated
+    aiisdefeated = False
+    userisdefeated = False
+    
+    print("Please wait about 5s, and we will show your units in blue and enemy units in red.")
+    time.sleep(5)
+    while True:
+        battleresult=0
+        checkifdefeated()
+        if(aiisdefeated):
+            victoryconditioncheckuser(userChosen)
+            break
+        if(userisdefeated):
+            victoryconditioncheckai(aiunits)
+            break
+        usercharged = 0
+        aichargeback = 0
+        aicharge2 = 0
+        usercharge2 = 0
+        print(Fore.CYAN)
+        sortandprint(userChosen)
+        print(Style.RESET_ALL)
+        print(Fore.RED)
+        sortandprint(aiunits)
+        print(Style.RESET_ALL)
+        while True:
+            validunit=input("It's your turn, select your unit that you want to launch the attack: ")
+            if(isaliveunit(validunit)):
+                break
+        targetunit=input("Select the enemy unit you want to attck: ")
+        while(istargetalive(targetunit)==False):
+            targetunit=input("Not valid target, reselect the enemy unit you want to attck: ")
+
+        aichargeguess = random.choices([0,1], weights=(0.65, 0.35), k=1)
+        aichargeback = aichargeguess[0]
+        if(aichargeback==0 or aichargechance<=0):
+            aichargeback = 0
+            print("AI didn't choose to charge back.")
+        if(aichargeback==1):
+            aichargechance -=1
+            print("AI choosed to charge back.")
+
+        while True:
+            userchargecheck=input(f"You have {userchargechance} chances of charge left,"
+                              " do use want to charge the enemy this time? (Enter yes or no)")
+            if(userchargecheck=="yes" and userchargechance>0):
+                userchargechance-=1
+                usercharged =1
+                fight(unitisalive,targetisalive,usercharged,aichargeback)
+                break
+            if(userchargecheck=="no"):
+                usercharged =0
+                fight(unitisalive,targetisalive,usercharged,aichargeback)
+                break
+        
+        checkifdefeated()
+        if(aiisdefeated):
+            victoryconditioncheckuser(userChosen)
+            break
+        if(userisdefeated):
+            victoryconditioncheckai(aiunits)
+            break
+        
+        print("It's AI's turn now.")
+        aichargeguess2 = random.choices([0,1], weights=(0.65, 0.35), k=1)
+        aicharge2 = aichargeguess2[0]
+        if(aichargechance<=0):
+            aicharge2=0
+        if(aicharge2==1):
+            aichargechance-=1
+        aiattackernum = aichooseunit2(aiunits)
+        aitargetnum = aichooseunit2(userChosen)
+        while True:
+            userchargecheck = input(f"AI use {aiunits[aiattackernum].name} to attack {userChosen[aitargetnum].name},"
+                                    f" you still have {userchargechance} charge chances left,do you want to charge back? (yes or no)")
+            if(userchargecheck=="yes" and userchargechance>0):
+                userchargechance-=1
+                usercharge2 =1
+                fight(aiunits[aiattackernum],userChosen[aitargetnum],aicharge2,usercharge2)
+                break
+            if(userchargecheck=="no"):
+                usercharge2 =0
+                fight(aiunits[aiattackernum],userChosen[aitargetnum],aicharge2,usercharge2)
+                break
+            
+            
+
+
+# In[29]:
+
+
+def usepreset(presetname):
+    global totalmoney
+    global userchargechance
+    global aichargechance
+    if(presetname=="preset1"):
+        totalmoney =3000
+        userchargechance =1
+        aichargechance=1
+    if(presetname=="preset2"):
+        totalmoney =10000
+        userchargechance =5
+        aichargechance=5
