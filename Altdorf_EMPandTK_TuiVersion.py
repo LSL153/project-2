@@ -338,13 +338,18 @@ def crumblingdmg(unit2: MeleeUnit,unit1: MeleeUnit):
 def attack(unit1: MeleeUnit, unit2: MeleeUnit,chargeland: bool):
     starttime = time.time()
     currenttime = starttime
-    count = 1
+    countu2 = 1
+    countu1 = 1
     while (unit1.remainhealth>0 and unit2.remainhealth>0):
         currenttime = round(time.time()-starttime,2)
         if(unit2.crumbling):
-            if(unit2.remainhealth <= unit2.totalhealth/2 and count ==1):
+            if(unit2.remainhealth <= unit2.totalhealth/2 and countu2 ==1):
                 crumblingdmg(unit2,unit1)
-                count += 1
+                countu2 += 1
+        if(unit1.crumbling):
+            if(unit1.remainhealth <= unit1.totalhealth/2 and countu1 ==1):
+                crumblingdmg(unit1,unit2)
+                countu1 += 1
         if(chargeland and currenttime<= 15):
             dmgdealt = totaldmghit(unit1, unit2,1)
             unit2.remainhealth -= dmgdealt
