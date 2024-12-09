@@ -431,4 +431,51 @@ def briefdetail():
             print(" |Charge defense vs. large|",end='')
         print()
 
+# In[16]:
+
+
+def checkrepeat(chosenroster):
+    num =1
+    for i in range(len(chosenroster)-1,-1,-1):
+            for j in range(i):
+                if(chosenroster[j].name==chosenroster[i].name and i!=j):
+                    chosenroster[j].name = chosenroster[j].name + " " + str(num)
+                    num+=1      
+
+
+# In[17]:
+
+
+def aichooseunit():
+    global totalmoney
+    aimoneyleft = totalmoney
+    global aiunits
+    aiunits = []
+    while True:
+        numaichosen = int(random.uniform(0, len(unitroster)))
+        if(numaichosen==len(unitroster)):
+            numaichosen-=1
+        aichosen = copy.copy(unitroster[numaichosen])
+        aichosen.name += " ai"
+        if(aimoneyleft>=aichosen.cost):
+            aiunits.append(aichosen)
+            aimoneyleft -= aichosen.cost
+        if(aimoneyleft<325):
+            break
+        
+
+
+# In[18]:
+
+
+def sortandprint(sortroster):
+    sortroster = sorted(sortroster, key=lambda x: x.name)
+    for units in sortroster:
+        if(units.damaged):
+            print(f"{units.name}, health {units.remainhealth}, is damaged.")
+        else:
+            print(f"{units.name}, health {units.remainhealth}.")
+    print("\n")
+
+
 
