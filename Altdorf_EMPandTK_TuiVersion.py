@@ -63,6 +63,7 @@ class MeleeUnit():
         self.fireatk = fireatk
         self.isinfantry =isinfantry
         self.islarge =islarge
+        self.original_max_health = health * unitsize
 
 
 # Objects of MeleeUnit class
