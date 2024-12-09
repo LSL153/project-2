@@ -478,4 +478,58 @@ def sortandprint(sortroster):
     print("\n")
 
 
+# In[19]:
+
+
+def doyouhavetheunit(unitaddskill)->bool:
+    global userChosen
+    global addskillunit
+    havethisunit = False
+    for unit in userChosen:
+        if(unitaddskill==unit.name):
+            havethisunit = True
+            addskillunit = unit
+    return havethisunit
+
+
+# In[20]:
+
+
+def isaliveunit(unitget)->bool:
+    global userChosen
+    global unitisalive
+    unitisvalid = False
+    for unit in userChosen:
+        if(unitget==unit.name and unit.remainhealth!=0):
+            unitisvalid = True
+            unitisalive = unit
+    return unitisvalid
+
+
+# In[21]:
+
+
+def istargetalive(targetget)->bool:
+    global aiunits
+    global targetisalive
+    targetisvalid = False
+    for unit in aiunits:
+        if(targetget==unit.name and unit.remainhealth!=0):
+            targetisvalid = True
+            targetisalive = unit
+    return targetisvalid
+
+
+# In[22]:
+
+
+def aichooseunit2(units)-> int:
+    while True:
+        numairand = int(random.uniform(0, len(units)))
+        if(units[numairand].remainhealth!=0):
+            if(numairand==len(units)):
+                numairand-=1
+            break
+            
+    return numairand
 
