@@ -130,6 +130,15 @@ unitroster.append(NecropolisKnightsHalberds)
 
 
 def printunitdetail(unit: MeleeUnit):
+    """
+    Prints detailed information about a specific unit.
+    
+    Parameters:
+        unit (MeleeUnit): The unit to display details for.
+    
+    Returns:
+        None
+    """
     print('unit details:')
     print('unit: ', unit.name)
     print('faction: ', unit.faction)
@@ -166,6 +175,15 @@ def printunitdetail(unit: MeleeUnit):
 
 
 def printfactionunits():
+    """
+    Displays all units available in the current faction.
+    
+    Parameters:
+        None
+    
+    Returns:
+        None
+    """
     global factionname
     factionname=str(input("Enter the faction you want to look at, type \"exit\" to exit: "))
     for factions in unitroster:
@@ -177,6 +195,15 @@ def printfactionunits():
 
 
 def buyfrenzy(unit1: MeleeUnit):
+    """
+    Adds the frenzy ability to a unit if eligible.
+    
+    Parameters:
+        unit1 (MeleeUnit): The unit to which the frenzy ability will be added.
+    
+    Returns:
+        bool: True if frenzy was successfully added, False otherwise.
+    """
     if(unit1.frenzy==True):
         print("You already have frenzy, can't add again.")
     else:
@@ -198,6 +225,15 @@ def buyfrenzy(unit1: MeleeUnit):
 
 
 def addfrenzy(unit1: MeleeUnit):
+    """
+    Applies the effects of the frenzy ability to a unit.
+    
+    Parameters:
+        unit1 (MeleeUnit): The unit to modify with frenzy effects.
+    
+    Returns:
+        None
+    """
     unit1.basedmg = math.ceil(1.1*(unit1.basedmg))
     unit1.apdmg = math.ceil(1.1*(unit1.apdmg))
     unit1.chargebonus = math.ceil(1.1*(unit1.chargebonus))
@@ -212,6 +248,17 @@ addfrenzy(Flagellants)
 
 
 def dmgtoarmor(bdmg: int, armor: int,usize: int) -> int:
+    """
+    Calculates the effective damage to a unit after accounting for its armor.
+    
+    Parameters:
+        bdmg (float): The base damage dealt.
+        armor (int): The armor value of the target unit.
+        usize (int): How many entities are left in this unit.
+    
+    Returns:
+        int: The effective damage after armor reduction.
+    """
     armordmg = armor * random.uniform(0.5, 1)
     if(armordmg>100):
         armordmg=100
@@ -224,7 +271,18 @@ def dmgtoarmor(bdmg: int, armor: int,usize: int) -> int:
 # In[9]:
 
 
-def totaldmghit(attacker: MeleeUnit, defender: MeleeUnit,chargeland: int)->int:
+def totaldmghit(attacker: MeleeUnit, defender: MeleeUnit,chargeland: bool)->int:
+    """
+    Computes the total damage dealt during a single attack.
+    
+    Parameters:
+        attacker (MeleeUnit): The unit initiating the attack.
+        defender (MeleeUnit): The unit being attacked.
+        cchargeland (bool): Indicates if a charge landed during the attack.
+    
+    Returns:
+        int: The total damage inflicted on the defender.
+    """
     hitlandnum = numhitland(attacker, defender, chargeland)
     if(chargeland==False):
         if(defender.isinfantry and attacker.antiinfantry!=0):
@@ -290,6 +348,17 @@ def totaldmghit(attacker: MeleeUnit, defender: MeleeUnit,chargeland: int)->int:
 
 
 def numhitland(attacker: MeleeUnit, defender: MeleeUnit, chargeland: bool)->int:
+    """
+    Determines the number of hits landed by the attacker on the defender.
+    
+    Parameters:
+        attacker (MeleeUnit): The unit attacking.
+        defender (MeleeUnit): The unit defending.
+        chargeland (bool): Indicates if a charge landed during the attack.
+    
+    Returns:
+        int: The number of successful hits landed.
+    """
     if(chargeland==False):
         matk = attacker.meleeatk
 #         print(f"no charge, matk = {matk}")
@@ -323,6 +392,16 @@ def numhitland(attacker: MeleeUnit, defender: MeleeUnit, chargeland: bool)->int:
 
 
 def crumblingdmg(unit2: MeleeUnit,unit1: MeleeUnit):
+    """
+    Calculates the damage taken by a unit due to crumbling effects.
+    
+    Parameters:
+        unit2 (MeleeUnit): The unit affected by crumbling.
+        unit1 (MeleeUnit): The unit causing the crumbling effect.
+    
+    Returns:
+        float: The damage taken due to crumbling.
+    """
     if(unit2.remainhealth>0 and unit1.remainhealth>0):
         dmgdealt = int(random.uniform(14, 28))
         unit2.remainhealth -= dmgdealt
@@ -336,6 +415,17 @@ def crumblingdmg(unit2: MeleeUnit,unit1: MeleeUnit):
 
 
 def attack(unit1: MeleeUnit, unit2: MeleeUnit,chargeland: bool):
+    """
+    Simulates an attack from one unit to another.
+    
+    Parameters:
+        unit1 (MeleeUnit): The attacking unit.
+        unit2 (MeleeUnit): The defending unit.
+        chargeland (bool): Indicates if a charge landed during the attack.
+    
+    Returns:
+        dict: A summary of the attack, including damage dealt and hits landed.
+    """
     starttime = time.time()
     currenttime = starttime
     countu2 = 1
@@ -378,6 +468,15 @@ def attack(unit1: MeleeUnit, unit2: MeleeUnit,chargeland: bool):
 
 
 def defeatcheck(unit1):
+    """
+    Checks if a unit has been defeated.
+    
+    Parameters:
+        unit1 (MeleeUnit): The unit to check for defeat.
+    
+    Returns:
+        bool: True if the unit is defeated, False otherwise.
+    """
     if(unit1.remainhealth==0):
         unit1.totalhealth = 0
         unit1.name+=" defeated"
@@ -389,6 +488,18 @@ def defeatcheck(unit1):
 
 
 def fight(unit1: MeleeUnit, unit2: MeleeUnit,achargeb: bool, bchargea: bool) -> MeleeUnit:
+    """
+    Executes a fight between two units, potentially with charging effects.
+    
+    Parameters:
+        unit1 (MeleeUnit): The first unit participating in the fight.
+        unit2 (MeleeUnit): The second unit participating in the fight.
+        achargeb (bool): Indicates if the first unit successfully charged the second.
+        bchargea (bool): Indicates if the second unit successfully charged the first.
+    
+    Returns:
+        None
+    """
     p1 = threading.Thread(target = attack,args=(unit1,unit2,achargeb))
     p2 = threading.Thread(target = attack,args=(unit2,unit1,bchargea))
     
@@ -416,6 +527,15 @@ def fight(unit1: MeleeUnit, unit2: MeleeUnit,achargeb: bool, bchargea: bool) -> 
 
 
 def briefdetail():
+    """
+    Prints a brief summary of all units in the roster.
+    
+    Parameters:
+        None
+    
+    Returns:
+        None
+    """
     for units in unitroster:
         print(units.name,end=' ')
         print(f"${units.cost}",end='')
@@ -437,10 +557,20 @@ def briefdetail():
             print(" |Charge defense vs. large|",end='')
         print()
 
+
 # In[16]:
 
 
 def checkrepeat(chosenroster):
+    """
+    Checks for duplicate units in the chosen roster.
+    
+    Parameters:
+        chosenroster (list): The roster of units to check.
+    
+    Returns:
+        bool: True if duplicates are found, False otherwise.
+    """
     num =1
     for i in range(len(chosenroster)-1,-1,-1):
             for j in range(i):
@@ -453,6 +583,15 @@ def checkrepeat(chosenroster):
 
 
 def aichooseunit():
+    """
+    Make ai randomly pick their unit.
+    
+    Parameters:
+        None
+    
+    Returns:
+        None
+    """
     global totalmoney
     aimoneyleft = totalmoney
     global aiunits
@@ -475,6 +614,15 @@ def aichooseunit():
 
 
 def sortandprint(sortroster):
+    """
+    Sorts a roster of units by their name and prints their details.
+
+    Parameters:
+        sortroster (list of MeleeUnit): The roster of units to be sorted and displayed.
+    
+    Returns:
+        None
+    """
     sortroster = sorted(sortroster, key=lambda x: x.name)
     for units in sortroster:
         if(units.damaged):
@@ -488,6 +636,15 @@ def sortandprint(sortroster):
 
 
 def doyouhavetheunit(unitaddskill)->bool:
+    """
+    Checks if the user has a specific unit.
+
+    Parameters:
+        unitaddskill (str): Name of the unit to check.
+    
+    Returns:
+        havethisunit (bool): True if the unit is found, False otherwise.
+    """
     global userChosen
     global addskillunit
     havethisunit = False
@@ -502,6 +659,15 @@ def doyouhavetheunit(unitaddskill)->bool:
 
 
 def isaliveunit(unitget)->bool:
+    """
+    Checks if a unit is alive.
+
+    Parameters:
+        unitget (str): Name of the unit to check.
+    
+    Returns:
+        unitisvalid (bool): True if the unit is alive (health is not 0), False otherwise.
+    """
     global userChosen
     global unitisalive
     unitisvalid = False
@@ -516,6 +682,15 @@ def isaliveunit(unitget)->bool:
 
 
 def istargetalive(targetget)->bool:
+    """
+    Checks if a target is alive.
+
+    Parameters:
+        targetget (str): Name of the target to check.
+    
+    Returns:
+        targetisvalid (bool): True if the target is alive (health is not 0), False otherwise.
+    """
     global aiunits
     global targetisalive
     targetisvalid = False
@@ -530,6 +705,15 @@ def istargetalive(targetget)->bool:
 
 
 def aichooseunit2(units)-> int:
+    """
+    Randomly selects a unit that is still alive.
+
+    Parameters:
+        units (list): List of units to choose from.
+    
+    Returns:
+        numairand (int): Index of the selected unit.
+    """
     while True:
         numairand = int(random.uniform(0, len(units)))
         if(units[numairand].remainhealth!=0):
@@ -539,10 +723,17 @@ def aichooseunit2(units)-> int:
             
     return numairand
 
+
 # In[23]:
 
 
 def checkifdefeated():
+    """
+    Checks if the AI or the user has been defeated by counting their defeated units.
+
+    Returns:
+        None
+    """
     global userChosen
     global aiunits
     defeadnumai = 0
@@ -569,6 +760,15 @@ def checkifdefeated():
 
 
 def calculateallhealth(roster)->int:
+    """
+    Calculates the total health of all units in a roster.
+
+    Parameters:
+        roster (list): List of units to calculate health for.
+    
+    Returns:
+        allhealth (int): Total health of all units in the roster.
+    """
     allhealth=0
     for unit in roster:
         allhealth += unit.totalhealth
@@ -579,6 +779,15 @@ def calculateallhealth(roster)->int:
 
 
 def victoryconditioncheckai(roster):
+    """
+    Checks the AI's victory condition based on remaining health percentage.
+
+    Parameters:
+        roster (list): List of AI units to evaluate.
+    
+    Returns:
+        None
+    """
     global aiallhealth
     totalhealthleft = 0
     for unit in roster:
@@ -597,6 +806,15 @@ def victoryconditioncheckai(roster):
 
 
 def victoryconditioncheckuser(roster):
+    """
+    Checks the user's victory condition based on remaining health percentage.
+
+    Parameters:
+        roster (list): List of user's units to evaluate.
+    
+    Returns:
+        None
+    """
     global userallhealth
     totalhealthleft = 0
     for unit in roster:
@@ -610,10 +828,20 @@ def victoryconditioncheckuser(roster):
     if(0.75 < totalhealthleft/userallhealth <= 1):
         print("\n Congratulations, all of AI's units are defeated!\nHeroic Vcitory!")
 
+
 # In[27]:
 
 
 def settings():
+    """
+    Configures game settings, including presets, total money, and charge chances.
+
+    Allows the user to choose between predefined presets or manually set the 
+    total money, user's charge chances, and AI's charge chances.
+
+    Returns:
+        None
+    """
     global totalmoney
     global userchargechance
     global aichargechance
@@ -666,6 +894,19 @@ def settings():
 
 
 def play():
+    """
+    Executes the main game loop, allowing the user and AI to select units, configure 
+    their skills, and engage in a turn-based battle.
+
+    Features:
+    - Unit selection and customization with skill additions.
+    - Turn-based attacks between user and AI.
+    - Victory and defeat conditions based on remaining unit health.
+    - Real-time decision-making for charging during attacks.
+
+    Returns:
+        None
+    """
     print("Welcome to Estalia, gentlemen!")
     global totalmoney
 #     totalmoney = 10000
@@ -838,6 +1079,15 @@ def play():
 
 
 def usepreset(presetname):
+    """
+    Applies a preset configuration for the game, setting total money and charge chances.
+
+    Parameters:
+        presetname (str): The name of the preset to apply ("preset1" or "preset2").
+    
+    Returns:
+        None
+    """
     global totalmoney
     global userchargechance
     global aichargechance
@@ -849,3 +1099,4 @@ def usepreset(presetname):
         totalmoney =10000
         userchargechance =5
         aichargechance=5
+
