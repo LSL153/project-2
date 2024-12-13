@@ -51,6 +51,11 @@ userwin = False
 fight_in_progress = False
 
 def checkrepeat(unit_list):
+    """
+    To check if there's repeated units in list
+    :param unit_list: The list which store units
+    :return: return the units in list which has no repeated units
+    """
     unique_units = []
     seen = {}
     for unit in unit_list:
