@@ -50,6 +50,7 @@ aiwin = False
 userwin = False
 fight_in_progress = False
 
+
 def checkrepeat(unit_list):
     """
     To check if there's repeated units in list
@@ -174,6 +175,14 @@ def attack(unit1, unit2, chargeland):
             time.sleep(unit1.meleecd - ((time.time() - starttime) % unit1.meleecd))
 
 def fight(unit1, unit2, achargeb, bchargea):
+    """
+    The function which let the units fight each other, and check if there is a defeated unit
+    :param unit1: one unit
+    :param unit2: one unit
+    :param achargeb: to see if unit1 wants charge unit2
+    :param bchargea: to see if unit2 wants charge unit 1
+    :return:
+    """
     global fight_in_progress
     fight_in_progress = True  # Fight is starting
     p1 = threading.Thread(target=attack, args=(unit1, unit2, achargeb))
@@ -209,26 +218,57 @@ def fight(unit1, unit2, achargeb, bchargea):
 # Button class
 class Button:
     def __init__(self, x, y, w, h, text):
+        """
+        The initial status of button
+        :param x: x coordinate
+        :param y: y coordinate
+        :param w: width
+        :param h: height
+        :param text: the text on the button
+        """
         self.rect = pygame.Rect(x, y, w, h)
         self.text = text
 
     def draw(self, screen, font):
+        """
+        the function allows us to draw the button on the screen
+        :param screen: screen
+        :param font: font size
+        :return: None
+        """
         pygame.draw.rect(screen, BLACK, self.rect, 2)
         text_surf = font.render(self.text, True, BLACK)
         screen.blit(text_surf, text_surf.get_rect(center=self.rect.center))
 
     def is_clicked(self, pos):
+        """
+        allow us to check if the button is clicked
+        :param pos: pos
+        :return: if the button is clicked
+        """
         return self.rect.collidepoint(pos)
 
 
 class UnitButton:
     def __init__(self, unit, x, y, is_user=True):
+        """
+        The initial status of button
+        :param unit: unit
+        :param x: x coordinate
+        :param y: y coordinate
+        :param is_user: if it's user
+        """
         self.unit = unit
         self.rect = pygame.Rect(x, y, 330, 30)
         self.color = BLUE if is_user else RED
         self.selected = False
 
     def draw(self, surface):
+        """
+        the function which allow us to draw the unit button on the screen
+        :param surface: screen
+        :return: None
+        """
         # Draw unit rectangle with selected color
         color = YELLOW if self.selected else self.color
         pygame.draw.rect(surface, color, self.rect)
@@ -243,12 +283,25 @@ class UnitButton:
         surface.blit(text, (self.rect.x + 5, self.rect.y + 8))
 
     def is_clicked(self, pos):
+        """
+        allow us to check if the button is clicked
+        :param pos: pos
+        :return: if the button is clicked
+        """
         return self.rect.collidepoint(pos)
 
 
 # InputBox class for interactive fields
 class InputBox:
     def __init__(self, x, y, w, h, text=''):
+        """
+        The initial status of input box
+        :param x: x coordinate
+        :param y: y coordinate
+        :param w: width
+        :param h: height
+        :param text: the text on the screen
+        """
         self.rect = pygame.Rect(x, y, w, h)
         self.color = BLACK
         self.text = text
@@ -256,6 +309,11 @@ class InputBox:
         self.active = False
 
     def handle_event(self, event):
+        """
+        to handle events when we press the mouse
+        :param event: event
+        :return:None
+        """
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.active = not self.active
@@ -273,13 +331,27 @@ class InputBox:
                 self.txt_surface = font_small.render(self.text, True, BLACK)
 
     def draw(self, screen):
+        """
+        the function allows us to draw the input box
+        :param screen: screen
+        :return: None
+        """
         pygame.draw.rect(screen, self.color, self.rect, 2)
         screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))
 
     def get_value(self):
+        """
+        return the text value of the input box
+        :return: text
+        """
         return self.text
 
     def set_value(self, text):
+        """
+        set the text value of the input box
+        :param text: text
+        :return: None
+        """
         self.text = text
         self.txt_surface = font_small.render(self.text, True, BLACK)
 
@@ -297,6 +369,32 @@ class MeleeUnit():
     def __init__(self, name, faction, unitsize, cost, health, meleeatk, meleedef, chargebonus,
                  fireres, magres, phyres, misres, wardsave, basedmg, apdmg, meleecd,
                  antiinfantry, antilarge, armor, magatk, fireatk, isinfantry, islarge):
+        """
+        The initial status of melee unit
+        :param name: name
+        :param faction: faction
+        :param unitsize: how many single soldier in a unit
+        :param cost: cost
+        :param health: health
+        :param meleeatk: the melee attack
+        :param meleedef: the melee defense
+        :param chargebonus: charge bonus
+        :param fireres: fire resistance
+        :param magres: magic resistance
+        :param phyres: physics resistance
+        :param misres: missile resistance
+        :param wardsave: ward save
+        :param basedmg: base damage
+        :param apdmg: ap damage
+        :param meleecd: melee cd
+        :param antiinfantry: anti infantry
+        :param antilarge: anti large
+        :param armor: armor
+        :param magatk: magic attack
+        :param fireatk: fire attack
+        :param isinfantry: if it's infantry
+        :param islarge: if it's large
+        """
         # Instance Variable
         self.name = name
         self.faction = faction
@@ -340,6 +438,7 @@ start_button = Button(WIDTH // 2 - 50, HEIGHT // 2 + 20, 100, 40, "Start")
 setting_button = Button(WIDTH // 2 - 50, HEIGHT // 2 + 80, 100, 40, "Setting")
 reset_button = Button(WIDTH - 180, HEIGHT - 70, 80, 30, "Reset")
 confirm_button = Button(WIDTH - 90, HEIGHT - 70, 80, 30, "Confirm")
+quit_button = Button(WIDTH // 2 - 50, HEIGHT // 2 + 140, 100, 40, "Quit")
 
 # InputBox instances for settings
 totalmoney_input = InputBox(300, 130, 140, 32, str(totalmoney))
@@ -411,6 +510,11 @@ all_units.append(NecropolisKnightsHalberds)
 
 # Function to display unit details on the screen (transfer from TUI)
 def display_unit_info(unit_button):
+    """
+    display the information about the unit
+    :param unit_button: the button of the unit
+    :return: print the information about the unit
+    """
     unit = unit_button.unit
     font = font_medium
     y_offset = 420
@@ -463,6 +567,11 @@ def display_unit_info(unit_button):
 
 # Function to toggle window size
 def toggle_window_size(fullscreen=False):
+    """
+    function to toggle window size
+    :param fullscreen: check if the window is fullscreen
+    :return: None
+    """
     global screen
     if fullscreen:
         screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
@@ -540,6 +649,11 @@ def battle_start():
 
 # Main loop
 def main():
+    """
+    the main method for the game
+    :return: None
+    """
+    # the global variable which needed
     global page, totalmoney, userchargechance, aichargechance, preset, unit_buttons, confirm_button, start_button, setting_button
     global battle_logs, turn, aiwin, userwin, fight_in_progress
     user_can_interact = True
@@ -564,12 +678,17 @@ def main():
     selected_enemy_unit = None
 
     def recalculate_button_positions():
+        """
+        Recalculates the button positions so that they won't block each other on the screen
+        :return: None
+        """
         start_x, start_y = 750, 420  # Starting position
         row_gap = 40  # Gap between rows
 
         for i, button in enumerate(confirmed_buttons):
             button.rect.topleft = (start_x, start_y + i * row_gap)
 
+    #print the unit buttons on the screen
     for i, unit in enumerate(all_units):
         row = i % buttons_per_column  # Row index (0 or 1)
         col = i // buttons_per_column  # Column index
@@ -589,12 +708,15 @@ def main():
             # Draw buttons
             start_button.draw(screen, font_small)
             setting_button.draw(screen, font_small)
+            quit_button.draw(screen, font_small)
 
         # Settings Page
         elif page == "setting":
+            # Display setting message
             setting_text = font_medium.render("Settings", True, BLACK)
             screen.blit(setting_text, (50, 20))
 
+            # the setting of the game
             preset_text = font_small.render("Select Preset:", True, BLACK)
             screen.blit(preset_text, (50, 80))
             preset1_button = Button(300, 80, 80, 30, "Preset 1")
@@ -616,7 +738,8 @@ def main():
 
             reset_button.draw(screen, font_small)
             confirm_button.draw(screen, font_small)
-        
+
+        # Page that user choose their units
         elif page == "Prepare Your Units":
             prepare_unit_text = font_large.render("Prepare Your Units", True, BLACK)
             screen.blit(prepare_unit_text, (400, 10))
@@ -632,9 +755,10 @@ def main():
             nextstep_button.draw(screen, font_medium)
 
             # unit_buttons = [UnitButton(unit, 50, 60 + i * 30) for i, unit in enumerate(all_units)]
-            # Draw all available units for selection
+            # Draw the units button for the user to choose
             for unit in unit_buttons:
                 unit.draw(screen)
+            # Draw the units button that the user chose
             for unit in confirmed_buttons:
                 unit.draw(screen)
             for button in confirmed_buttons:
@@ -690,6 +814,7 @@ def main():
             start_x, start_y = 660, 395  # Starting position for the first button
             button_height, button_gap = 30, 5  # Height of each button and gap between buttons
 
+            # draw the unit button the user chose
             for i, unit_button in enumerate(confirmed_buttons_list):
                 y = start_y + i * (button_height + button_gap)  # Position each button vertically
                 unit_button.rect.topleft = (start_x, y)  # Set the top-left position of the button
@@ -849,6 +974,7 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                # press anywhere to the battle page
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     page = "battle"
 
@@ -1007,10 +1133,19 @@ def main():
             if userwin:
                 battle_logs.append("AI has no remaining units! User wins!")
             render_text(f"{battle_logs[-1]}", font_medium, BLACK, WIDTH // 2 - 200, HEIGHT // 2)
+            quit_button.draw(screen, font_small)
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = event.pos
+                    if quit_button.is_clicked(pos):
+                        running = False
+                        pygame.quit()
+                        sys.exit()
+
+
 
 
 
@@ -1036,6 +1171,10 @@ def main():
                         page = "Prepare Your Units"
                     elif setting_button.is_clicked(event.pos):
                         page = "setting"
+                    elif quit_button.is_clicked(event.pos):
+                        running = False
+                        pygame.quit()
+                        sys.exit()
                 elif page == "setting":
                     if reset_button.is_clicked(event.pos):
                         # Reset to preset 1
