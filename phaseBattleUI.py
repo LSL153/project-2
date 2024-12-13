@@ -71,6 +71,10 @@ def checkrepeat(unit_list):
 
 
 def aichooseunit():
+    """
+    The function which let the ai, which is the enemy choice units
+    :return: None
+    """
     global totalmoney
     aimoneyleft = totalmoney
     global aiunits
