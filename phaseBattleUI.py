@@ -2,6 +2,11 @@
 # Date: 12/13/2024  
 #Description: Using pygame to build a battle game.
 
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
 import threading
 import time
 import math
