@@ -1,7 +1,7 @@
 # Author: Wenyi Gong, Jiakai Hu, Shanlin Li 
 # Date: 12/7/2024  
 #Description: Using pygame to build a battle game.
-
+#This is the old version of our code, please use the attach file called phaseBattleUI to run the program.
 import pygame
 import sys
 
