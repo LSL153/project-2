@@ -113,6 +113,13 @@ def crumblingdmg(crumbling_unit: MeleeUnit, other_unit: MeleeUnit):
         threading.Timer(1, crumblingdmg, [crumbling_unit, other_unit]).start()
 
 def attack(unit1, unit2, chargeland):
+    """
+    the function which allows unit attack to each other
+    :param unit1: one unit do or take the attack
+    :param unit2: one unit do or take the attack
+    :param chargeland: if user or ai want to use charge
+    :return:
+    """
     starttime = time.time()
     countu2 = 1
     countu1 = 1
