@@ -103,6 +103,12 @@ battle_logs = []
 message_queue = Queue()
 
 def crumblingdmg(crumbling_unit: MeleeUnit, other_unit: MeleeUnit):
+    """
+    The function which set the damage to the crumbling unit
+    :param crumbling_unit: the unit has a crumbling status
+    :param other_unit: the other unit
+    :return:
+    """
     if crumbling_unit.remainhealth > 0 and other_unit.remainhealth > 0:
         dmgdealt = int(random.uniform(14, 28))
         crumbling_unit.remainhealth -= dmgdealt
